@@ -60,7 +60,10 @@ describe('PostService', () => {
         id: 1,
         author: '7166a277-7d6c-4b67-9f3f-a25fc2e6649c',
       } as Post;
-      const user = { id: 1, username: 'testuser' };
+      const user = {
+        id: '7166a277-7d6c-4b67-9f3f-a25fc2e6649c',
+        username: 'testuser',
+      };
 
       jest.spyOn(prismaService.post, 'findUnique').mockResolvedValue(post);
       jest.spyOn(authClient, 'send').mockReturnValue(of(user));
