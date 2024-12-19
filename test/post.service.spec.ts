@@ -146,7 +146,10 @@ describe('PostService', () => {
         },
       ] as Post[];
       const count = 1;
-      const user = { id: 1, username: 'testuser' };
+      const user = {
+        id: '7166a277-7d6c-4b67-9f3f-a25fc2e6649c',
+        username: 'testuser',
+      };
 
       jest.spyOn(prismaService.post, 'count').mockResolvedValue(count);
       jest.spyOn(prismaService.post, 'findMany').mockResolvedValue(posts);
@@ -225,7 +228,10 @@ describe('PostService', () => {
         },
       ] as Post[];
       const count = 1;
-      const user = { id: 1, username: 'testuser' };
+      const user = {
+        id: '7166a277-7d6c-4b67-9f3f-a25fc2e6649c',
+        username: 'testuser',
+      };
 
       jest.spyOn(prismaService.post, 'count').mockResolvedValue(count);
       jest.spyOn(prismaService.post, 'findMany').mockResolvedValue(posts);
