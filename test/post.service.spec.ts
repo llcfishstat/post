@@ -60,7 +60,10 @@ describe('PostService', () => {
         id: 1,
         author: '7166a277-7d6c-4b67-9f3f-a25fc2e6649c',
       } as Post;
-      const user = { id: 1, username: 'testuser' };
+      const user = {
+        id: '7166a277-7d6c-4b67-9f3f-a25fc2e6649c',
+        username: 'testuser',
+      };
 
       jest.spyOn(prismaService.post, 'findUnique').mockResolvedValue(post);
       jest.spyOn(authClient, 'send').mockReturnValue(of(user));
@@ -72,7 +75,7 @@ describe('PostService', () => {
       });
       expect(authClient.send).toHaveBeenCalledWith(
         'getUserById',
-        JSON.stringify({ id: 1 }),
+        JSON.stringify({ id: '7166a277-7d6c-4b67-9f3f-a25fc2e6649c' }),
       );
       expect(result).toEqual({ ...post, author: user });
     });
@@ -146,7 +149,10 @@ describe('PostService', () => {
         },
       ] as Post[];
       const count = 1;
-      const user = { id: 1, username: 'testuser' };
+      const user = {
+        id: '7166a277-7d6c-4b67-9f3f-a25fc2e6649c',
+        username: 'testuser',
+      };
 
       jest.spyOn(prismaService.post, 'count').mockResolvedValue(count);
       jest.spyOn(prismaService.post, 'findMany').mockResolvedValue(posts);
@@ -225,7 +231,10 @@ describe('PostService', () => {
         },
       ] as Post[];
       const count = 1;
-      const user = { id: 1, username: 'testuser' };
+      const user = {
+        id: '7166a277-7d6c-4b67-9f3f-a25fc2e6649c',
+        username: 'testuser',
+      };
 
       jest.spyOn(prismaService.post, 'count').mockResolvedValue(count);
       jest.spyOn(prismaService.post, 'findMany').mockResolvedValue(posts);
@@ -263,8 +272,15 @@ describe('PostService', () => {
         title: 'Updated title',
         content: 'Updated content',
       } as PostUpdateDto;
-      const post = { id, author: 1, ...data } as unknown as Post;
-      const user = { id: 1, username: 'testuser' };
+      const post = {
+        id,
+        author: '7166a277-7d6c-4b67-9f3f-a25fc2e6649c',
+        ...data,
+      } as unknown as Post;
+      const user = {
+        id: '7166a277-7d6c-4b67-9f3f-a25fc2e6649c',
+        username: 'testuser',
+      };
 
       jest.spyOn(prismaService.post, 'findUnique').mockResolvedValue(post);
       jest.spyOn(prismaService.post, 'update').mockResolvedValue(post);
@@ -284,7 +300,7 @@ describe('PostService', () => {
       });
       expect(authClient.send).toHaveBeenCalledWith(
         'getUserById',
-        JSON.stringify({ userId: 1 }),
+        JSON.stringify({ userId: '7166a277-7d6c-4b67-9f3f-a25fc2e6649c' }),
       );
       expect(result).toEqual({ ...post, author: user });
     });
