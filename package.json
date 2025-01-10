@@ -12,8 +12,8 @@
     "seed:admin": "ts-node src/seed/admin.seed.ts",
     "generate": "prisma generate",
     "start": "node dist/main",
-    "migrate": "prisma migrate dev",
-    "migrate:prod": "prisma migrate deploy",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:migrate:prod": "prisma migrate deploy",
     "lint": "eslint '{src,test}/**/*.{js,ts}'",
     "lint:fix": "eslint --fix '{src,test}/**/*.{js,ts}'",
     "test": "jest --config test/jest.json --runInBand --passWithNoTests --forceExit"
