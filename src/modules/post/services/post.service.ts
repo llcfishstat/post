@@ -8,37 +8,37 @@ export class PostService {
   constructor(private readonly prisma: PrismaService) {}
 
   async getCuttingById(id: number): Promise<SimpleDictionaryDto> {
-    const record = await this.prisma.cutting.findUnique({ where: { id } });
+    const record = await this.prisma.cuttings.findUnique({ where: { id } });
     if (!record) {
       throw new NotFoundException(`Cutting with ID=${id} not found`);
     }
-    return { id: record.id, name: record.name };
+    return { id: record.id, name: record.title };
   }
 
   async getSortById(id: number): Promise<SimpleDictionaryDto> {
-    const record = await this.prisma.sort.findUnique({ where: { id } });
+    const record = await this.prisma.sorts.findUnique({ where: { id } });
     if (!record) {
       throw new NotFoundException(`Sort with ID=${id} not found`);
     }
-    return { id: record.id, name: record.name };
+    return { id: record.id, name: record.title };
   }
 
   async getCatchAreaById(id: number): Promise<SimpleDictionaryDto> {
-    const record = await this.prisma.catchArea.findUnique({ where: { id } });
+    const record = await this.prisma.catchAreas.findUnique({ where: { id } });
     if (!record) {
       throw new NotFoundException(`CatchArea with ID=${id} not found`);
     }
-    return { id: record.id, name: record.name };
+    return { id: record.id, name: record.title };
   }
 
   async getTypeOfProcessingById(id: number): Promise<SimpleDictionaryDto> {
-    const record = await this.prisma.typeOfProcessing.findUnique({
+    const record = await this.prisma.typesOfProcessing.findUnique({
       where: { id },
     });
     if (!record) {
       throw new NotFoundException(`TypeOfProcessing with ID=${id} not found`);
     }
-    return { id: record.id, name: record.name };
+    return { id: record.id, name: record.title };
   }
 
   async searchCuttingByTerm(term: string): Promise<SimpleDictionaryDto[]> {
@@ -46,15 +46,15 @@ export class PostService {
       return [];
     }
 
-    const records = await this.prisma.cutting.findMany({
+    const records = await this.prisma.cuttings.findMany({
       where: {
-        name: {
+        title: {
           contains: term,
           mode: 'insensitive',
         },
       },
     });
-    return records.map((r) => ({ id: r.id, name: r.name }));
+    return records.map((r) => ({ id: r.id, name: r.title }));
   }
 
   async searchSortByTerm(term: string): Promise<SimpleDictionaryDto[]> {
@@ -62,15 +62,15 @@ export class PostService {
       return [];
     }
 
-    const records = await this.prisma.cutting.findMany({
+    const records = await this.prisma.sorts.findMany({
       where: {
-        name: {
+        title: {
           contains: term,
           mode: 'insensitive',
         },
       },
     });
-    return records.map((r) => ({ id: r.id, name: r.name }));
+    return records.map((r) => ({ id: r.id, name: r.title }));
   }
 
   async searchCatchAreaByTerm(term: string): Promise<SimpleDictionaryDto[]> {
@@ -78,15 +78,15 @@ export class PostService {
       return [];
     }
 
-    const records = await this.prisma.cutting.findMany({
+    const records = await this.prisma.catchAreas.findMany({
       where: {
-        name: {
+        title: {
           contains: term,
           mode: 'insensitive',
         },
       },
     });
-    return records.map((r) => ({ id: r.id, name: r.name }));
+    return records.map((r) => ({ id: r.id, name: r.title }));
   }
 
   async searchTypeOfProcessingByTerm(
@@ -96,14 +96,14 @@ export class PostService {
       return [];
     }
 
-    const records = await this.prisma.cutting.findMany({
+    const records = await this.prisma.typesOfProcessing.findMany({
       where: {
-        name: {
+        title: {
           contains: term,
           mode: 'insensitive',
         },
       },
     });
-    return records.map((r) => ({ id: r.id, name: r.name }));
+    return records.map((r) => ({ id: r.id, name: r.title }));
   }
 }

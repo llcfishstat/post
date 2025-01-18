@@ -7,15 +7,15 @@ import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CommonModule } from 'src/common/common.module';
-import { LoggingMiddleware } from 'src/middlewares/logging.middleware';
-import { ResponseInterceptor } from 'src/interceptors/response.interceptor';
-import { AuthGuard } from 'src/guards/auth.guard';
-import { HttpExceptionFilter } from 'src/filters/http.exception.filter';
+import { LoggingMiddleware } from 'src/common/middlewares/logging.middleware';
+import { ResponseInterceptor } from 'src/common/interceptors/response.interceptor';
+import { AuthGuard } from 'src/common/guards/auth.guard';
+import { HttpExceptionFilter } from 'src/common/filters/http.exception.filter';
 
 import { PrismaService } from '../common/services/prisma.service';
 import { PostModule } from '../modules/post/post.module';
 import { AppController } from './app.controller';
-import { RolesGuard } from '../guards/roles.guard';
+import { RolesGuard } from '../common/guards/roles.guard';
 
 @Module({
   imports: [
