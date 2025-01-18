@@ -1,32 +1,12 @@
 import { Module } from '@nestjs/common';
-import { ClientsModule, Transport } from '@nestjs/microservices';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 
 import { PostController } from './controllers/post.controller';
 import { PostService } from './services/post.service';
 import { PrismaService } from '../../common/services/prisma.service';
 
 @Module({
-  imports: [
-    ConfigModule,
-    ClientsModule.registerAsync([
-      {
-        name: 'AUTH_SERVICE',
-        imports: [ConfigModule],
-        useFactory: async (configService: ConfigService) => ({
-          transport: Transport.RMQ,
-          options: {
-            urls: [`${configService.get('rmq.uri')}`],
-            queue: `${configService.get('rmq.auth')}`,
-            queueOptions: {
-              durable: false,
-            },
-          },
-        }),
-        inject: [ConfigService],
-      },
-    ]),
-  ],
+  imports: [ConfigModule],
   controllers: [PostController],
   providers: [PrismaService, PostService],
 })

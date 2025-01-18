@@ -22,7 +22,6 @@ async function bootstrap() {
 
   const expressApp = app.getHttpAdapter().getInstance();
 
-  // add root message
   expressApp.get('/', (_req: Request, res: Response) => {
     res.status(200).json({
       status: 200,
