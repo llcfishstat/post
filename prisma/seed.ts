@@ -20,6 +20,20 @@ async function main() {
     ],
   });
 
+  await prisma.sizes.createMany({
+    data: [
+      {title:"3S"},
+      {title:"2S"},
+      {title:"S"},
+      {title:"M"},
+      {title:"L"},
+      {title:"2L"},
+      {title:"3L"},
+      {title:"MIX"},
+      {title:"Не сортированный"}
+    ],
+  });
+
   await prisma.sorts.createMany({
     data: [
       {title:"2-й сорт"},

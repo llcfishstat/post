@@ -1,8 +1,8 @@
-import { SimpleDictionaryDto } from './posts.interface';
+import { DictionaryDto } from './posts.interface';
 
 export interface IPostService {
-  getCuttingById(id: number): Promise<SimpleDictionaryDto>;
-  getSortById(id: number): Promise<SimpleDictionaryDto>;
-  getCatchAreaById(id: number): Promise<SimpleDictionaryDto>;
-  getTypeOfProcessingById(id: number): Promise<SimpleDictionaryDto>;
+  getCuttingById(id: number): Promise<DictionaryDto>;
+  getSortById(id: number): Promise<DictionaryDto>;
+  getCatchAreaById(id: number): Promise<DictionaryDto>;
+  getTypeOfProcessingById(id: number): Promise<DictionaryDto>;
 }

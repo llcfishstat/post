@@ -45,3 +45,10 @@ model Products {
 
   @@map("products")
 }
+
+model Sizes {
+  id   Int    @id @default(autoincrement())
+  title String
+
+  @@map("sizes")
+}

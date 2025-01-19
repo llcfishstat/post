@@ -51,4 +51,14 @@ export class PostController {
   async searchTypeOfProcessing(@Query('term') term: string) {
     return this.postService.searchTypeOfProcessingByTerm(term);
   }
+
+  @Get('sizes')
+  async searchSizes(@Query('term') term: string) {
+    return this.postService.searchSizeByTerm(term);
+  }
+
+  @Get('products')
+  async searchProducts(@Query('term') term: string) {
+    return this.postService.searchProductByTerm(term);
+  }
 }
