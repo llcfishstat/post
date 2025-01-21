@@ -1,4 +1,4 @@
-## Post Submodule Service for Fishstat
+## Post Submodule Service
 
 [Nest](https://github.com/nestjs/nest) Microservice framework post service TypeScript repository.
 
