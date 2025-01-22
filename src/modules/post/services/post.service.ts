@@ -1,155 +1,149 @@
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
-import { ClientProxy } from '@nestjs/microservices';
-import { firstValueFrom } from 'rxjs';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/common/services/prisma.service';
 
-import { PostUpdateDto } from '../dtos/post.update.dto';
-import { PostCreateDto } from '../dtos/post.create.dto';
-import { PostGetDto } from '../dtos/post.get.dto';
+import { DictionaryDto } from '../interfaces/posts.interface';
 
 @Injectable()
 export class PostService {
-  constructor(
-    private prismaService: PrismaService,
-    @Inject('AUTH_SERVICE') private readonly authClient: ClientProxy,
-  ) {
-    this.authClient.connect();
+  constructor(private readonly prisma: PrismaService) {}
+
+  async getCuttingById(id: number): Promise<DictionaryDto> {
+    const record = await this.prisma.cuttings.findUnique({ where: { id } });
+    if (!record) {
+      throw new NotFoundException(`Cutting with ID=${id} not found`);
+    }
+    return { id: record.id, name: record.title };
   }
 
-  public async getOnePost(id: number) {
-    const post = await this.prismaService.post.findUnique({
-      where: {
-        id: Number(id),
-      },
+  async getSortById(id: number): Promise<DictionaryDto> {
+    const record = await this.prisma.sorts.findUnique({ where: { id } });
+    if (!record) {
+      throw new NotFoundException(`Sort with ID=${id} not found`);
+    }
+    return { id: record.id, name: record.title };
+  }
+
+  async getProductById(id: number): Promise<DictionaryDto> {
+    const record = await this.prisma.products.findUnique({ where: { id } });
+    if (!record) {
+      throw new NotFoundException(`Product with ID=${id} not found`);
+    }
+    return { id: record.id, name: record.title };
+  }
+
+  async getSizeById(id: number): Promise<DictionaryDto> {
+    const record = await this.prisma.sizes.findUnique({ where: { id } });
+    if (!record) {
+      throw new NotFoundException(`Size with ID=${id} not found`);
+    }
+    return { id: record.id, name: record.title };
+  }
+
+  async getCatchAreaById(id: number): Promise<DictionaryDto> {
+    const record = await this.prisma.catchAreas.findUnique({ where: { id } });
+    if (!record) {
+      throw new NotFoundException(`CatchArea with ID=${id} not found`);
+    }
+    return { id: record.id, name: record.title };
+  }
+
+  async getTypeOfProcessingById(id: number): Promise<DictionaryDto> {
+    const record = await this.prisma.typesOfProcessing.findUnique({
+      where: { id },
     });
-    if (!post) {
-      throw new HttpException('postNotFound', HttpStatus.NOT_FOUND);
+    if (!record) {
+      throw new NotFoundException(`TypeOfProcessing with ID=${id} not found`);
     }
-    const createdBy = await firstValueFrom(
-      this.authClient.send('getUserById', JSON.stringify({ id: post.author })),
-    );
-    post.author = createdBy;
-    return post;
+    return { id: record.id, name: record.title };
   }
 
-  public async createNewPost(data: PostCreateDto, userId: string) {
-    try {
-      const { content, images, title } = data;
-      const createPost = await this.prismaService.post.create({
-        data: {
-          author: userId,
-          content: content.trim(),
-          title: title.trim(),
-          images: {
-            create: images.map((item) => {
-              return {
-                image: item,
-              };
-            }),
-          },
-        },
-      });
-      const createdBy = await firstValueFrom(
-        this.authClient.send(
-          'getUserById',
-          JSON.stringify({
-            userId,
-          }),
-        ),
-      );
-      createPost.author = createdBy;
-      return createPost;
-    } catch (e) {
-      throw e;
-    }
-  }
-
-  public async getAllPosts(data: PostGetDto) {
-    const { skip, take, search } = data;
-    const count = await this.prismaService.post.count({
-      where: search && {
-        OR: [
-          {
-            content: {
-              contains: search,
-              mode: 'insensitive',
-            },
-          },
-          {
+  async searchCuttingByTerm(term: string): Promise<DictionaryDto[]> {
+    const records = await this.prisma.cuttings.findMany({
+      where: term?.trim()
+        ? {
             title: {
-              contains: search,
+              contains: term,
               mode: 'insensitive',
             },
-          },
-        ],
-      },
+          }
+        : {},
+      take: 3,
     });
-
-    const response = await this.prismaService.post.findMany({
-      where: search && {
-        OR: [
-          {
-            content: {
-              contains: search,
-              mode: 'insensitive',
-            },
-          },
-          {
-            title: {
-              contains: search,
-              mode: 'insensitive',
-            },
-          },
-        ],
-      },
-      skip,
-      take,
-    });
-
-    for (const post of response) {
-      const createdBy = await firstValueFrom(
-        this.authClient.send(
-          'getUserById',
-          JSON.stringify({ userId: post.author }),
-        ),
-      );
-      post.author = createdBy;
-    }
-
-    return {
-      count,
-      data: response,
-    };
+    return records.map((r) => ({ id: r.id, name: r.title }));
   }
 
-  public async updatePost(id: number, data: PostUpdateDto) {
-    try {
-      const { title, content } = data;
-      const findPost = await this.prismaService.post.findUnique({
-        where: { id },
-      });
-      if (!findPost) {
-        throw new HttpException('postNotFound', HttpStatus.NOT_FOUND);
-      }
-      const post = await this.prismaService.post.update({
-        where: {
-          id,
-        },
-        data: {
-          title: title.trim(),
-          content: content.trim(),
-        },
-      });
-      const createdBy = await firstValueFrom(
-        this.authClient.send(
-          'getUserById',
-          JSON.stringify({ userId: post.author }),
-        ),
-      );
-      post.author = createdBy;
-      return post;
-    } catch (e) {
-      throw e;
-    }
+  async searchSortByTerm(term: string): Promise<DictionaryDto[]> {
+    const records = await this.prisma.sorts.findMany({
+      where: term?.trim()
+        ? {
+            title: {
+              contains: term,
+              mode: 'insensitive',
+            },
+          }
+        : {},
+      take: 3,
+    });
+    return records.map((r) => ({ id: r.id, name: r.title }));
+  }
+
+  async searchCatchAreaByTerm(term: string): Promise<DictionaryDto[]> {
+    const records = await this.prisma.catchAreas.findMany({
+      where: term?.trim()
+        ? {
+            title: {
+              contains: term,
+              mode: 'insensitive',
+            },
+          }
+        : {},
+      take: 3,
+    });
+    return records.map((r) => ({ id: r.id, name: r.title }));
+  }
+
+  async searchTypeOfProcessingByTerm(term: string): Promise<DictionaryDto[]> {
+    const records = await this.prisma.typesOfProcessing.findMany({
+      where: term?.trim()
+        ? {
+            title: {
+              contains: term,
+              mode: 'insensitive',
+            },
+          }
+        : {},
+      take: 3,
+    });
+    return records.map((r) => ({ id: r.id, name: r.title }));
+  }
+
+  async searchProductByTerm(term: string): Promise<DictionaryDto[]> {
+    const records = await this.prisma.products.findMany({
+      where: term?.trim()
+        ? {
+            title: {
+              contains: term,
+              mode: 'insensitive',
+            },
+          }
+        : {},
+      take: 3,
+    });
+    return records.map((r) => ({ id: r.id, name: r.title }));
+  }
+
+  async searchSizeByTerm(term: string): Promise<DictionaryDto[]> {
+    const records = await this.prisma.sizes.findMany({
+      where: term?.trim()
+        ? {
+            title: {
+              contains: term,
+              mode: 'insensitive',
+            },
+          }
+        : {},
+      take: 3,
+    });
+    return records.map((r) => ({ id: r.id, name: r.title }));
   }
 }

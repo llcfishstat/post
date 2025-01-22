@@ -1,4 +1,4 @@
-export interface GetResponse<T> {
-  count: number;
-  data: T[];
+export interface DictionaryDto {
+  id: number;
+  name: string;
 }

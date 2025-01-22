@@ -1,16 +1,8 @@
-import { Post } from '@prisma/client';
-
-import { PostUpdateDto } from '../dtos/post.update.dto';
-import { PostCreateDto } from '../dtos/post.create.dto';
-import { GetResponse } from './posts.interface';
+import { DictionaryDto } from './posts.interface';
 
 export interface IPostService {
-  getOnePost(id: number): Promise<Post>;
-  createNewPost(data: PostCreateDto, userId: string): Promise<Post>;
-  getAllPosts(data: {
-    page: number;
-    limit: number;
-    term: string;
-  }): Promise<GetResponse<Post>>;
-  updatePost(id: number, data: PostUpdateDto): Promise<Post>;
+  getCuttingById(id: number): Promise<DictionaryDto>;
+  getSortById(id: number): Promise<DictionaryDto>;
+  getCatchAreaById(id: number): Promise<DictionaryDto>;
+  getTypeOfProcessingById(id: number): Promise<DictionaryDto>;
 }

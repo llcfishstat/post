@@ -1,11 +1,8 @@
-import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 
 import { PostService } from '../services/post.service';
-import { PostCreateDto } from '../dtos/post.create.dto';
-import { AuthUser } from '../../../decorators/auth.decorator';
-import { PostGetDto } from '../dtos/post.get.dto';
-import { PostUpdateDto } from '../dtos/post.update.dto';
 
 @ApiTags('post')
 @Controller({
@@ -15,23 +12,53 @@ import { PostUpdateDto } from '../dtos/post.update.dto';
 export class PostController {
   constructor(private readonly postService: PostService) {}
 
-  @Post()
-  createPost(@Body() data: PostCreateDto, @AuthUser() user) {
-    return this.postService.createNewPost(data, user.id);
+  @MessagePattern('getCuttingById')
+  async getCuttingById(@Payload() data: { id: number }) {
+    return this.postService.getCuttingById(data.id);
   }
 
-  @Get()
-  getPosts(@Query() data: PostGetDto) {
-    return this.postService.getAllPosts(data);
+  @MessagePattern('getSortById')
+  async getSortById(@Payload() data: { id: number }) {
+    return this.postService.getSortById(data.id);
   }
 
-  @Put(':id')
-  updatePosts(@Param('id') id: number, @Body() data: PostUpdateDto) {
-    return this.postService.updatePost(id, data);
+  @MessagePattern('getCatchAreaById')
+  async getCatchAreaById(@Payload() data: { id: number }) {
+    return this.postService.getCatchAreaById(data.id);
   }
 
-  @Get(':id')
-  getPost(@Param('id') id: number) {
-    return this.postService.getOnePost(id);
+  @MessagePattern('getTypeOfProcessingById')
+  async getTypeOfProcessingById(@Payload() data: { id: number }) {
+    return this.postService.getTypeOfProcessingById(data.id);
+  }
+
+  @Get('cutting-type')
+  async searchCutting(@Query('term') term: string) {
+    return this.postService.searchCuttingByTerm(term);
+  }
+
+  @Get('sort')
+  async searchSort(@Query('term') term: string) {
+    return this.postService.searchSortByTerm(term);
+  }
+
+  @Get('catch-area')
+  async searchCatchArea(@Query('term') term: string) {
+    return this.postService.searchCatchAreaByTerm(term);
+  }
+
+  @Get('type-of-processing')
+  async searchTypeOfProcessing(@Query('term') term: string) {
+    return this.postService.searchTypeOfProcessingByTerm(term);
+  }
+
+  @Get('sizes')
+  async searchSizes(@Query('term') term: string) {
+    return this.postService.searchSizeByTerm(term);
+  }
+
+  @Get('products')
+  async searchProducts(@Query('term') term: string) {
+    return this.postService.searchProductByTerm(term);
   }
 }

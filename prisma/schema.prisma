@@ -11,29 +11,44 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Post {
-  id         Int          @id @default(autoincrement())
-  title      String
-  content    String
-  author     String       @default(uuid())
-  images     PostImages[]
-  created_at DateTime     @default(now())
-  updated_at DateTime     @updatedAt
-  deleted_at DateTime?
-  is_deleted Boolean      @default(false)
+model Cuttings {
+  id   Int    @id @default(autoincrement())
+  title String
 
-  @@map("posts")
+  @@map("types_of_cutting")
 }
 
-model PostImages {
-  id         Int       @id @default(autoincrement())
-  image      String
-  created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt
-  deleted_at DateTime?
-  is_deleted Boolean   @default(false)
-  post       Post?     @relation(fields: [post_id], references: [id])
-  post_id    Int?
+model Sorts {
+  id   Int    @id @default(autoincrement())
+  title String
 
-  @@map("posts_images")
+  @@map("sorts")
+}
+
+model CatchAreas {
+  id   Int    @id @default(autoincrement())
+  title String
+
+  @@map("catch_areas")
+}
+
+model TypesOfProcessing {
+  id   Int    @id @default(autoincrement())
+  title String
+
+  @@map("types_of_processing")
+}
+
+model Products {
+  id   Int    @id @default(autoincrement())
+  title String
+
+  @@map("products")
+}
+
+model Sizes {
+  id   Int    @id @default(autoincrement())
+  title String
+
+  @@map("sizes")
 }
