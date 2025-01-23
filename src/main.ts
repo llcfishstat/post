@@ -65,7 +65,7 @@ async function bootstrap() {
     transport: Transport.RMQ,
     options: {
       urls: [`${configService.get('rmq.uri')}`],
-      queue: `${configService.get('rmq.files')}`,
+      queue: `${configService.get('rmq.post')}`,
       queueOptions: { durable: false },
       prefetchCount: 1,
     },
