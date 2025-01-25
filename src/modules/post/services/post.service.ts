@@ -7,6 +7,54 @@ import { DictionaryDto } from '../interfaces/posts.interface';
 export class PostService {
   constructor(private readonly prisma: PrismaService) {}
 
+  async getAllByIds(data: {
+    cuttingTypeId?: number;
+    sortId?: number;
+    catchAreaId?: number;
+    processingTypeId?: number;
+    sizeId?: number;
+    productId?: number;
+  }): Promise<{
+    cutting?: DictionaryDto;
+    sort?: DictionaryDto;
+    catchArea?: DictionaryDto;
+    processingType?: DictionaryDto;
+    size?: DictionaryDto;
+    product?: DictionaryDto;
+  }> {
+    const result: {
+      cutting?: DictionaryDto;
+      sort?: DictionaryDto;
+      catchArea?: DictionaryDto;
+      processingType?: DictionaryDto;
+      size?: DictionaryDto;
+      product?: DictionaryDto;
+    } = {};
+
+    if (data.cuttingTypeId) {
+      result.cutting = await this.getCuttingById(data.cuttingTypeId);
+    }
+    if (data.sortId) {
+      result.sort = await this.getSortById(data.sortId);
+    }
+    if (data.catchAreaId) {
+      result.catchArea = await this.getCatchAreaById(data.catchAreaId);
+    }
+    if (data.processingTypeId) {
+      result.processingType = await this.getTypeOfProcessingById(
+        data.processingTypeId,
+      );
+    }
+    if (data.sizeId) {
+      result.size = await this.getSizeById(data.sizeId);
+    }
+    if (data.productId) {
+      result.product = await this.getProductById(data.productId);
+    }
+
+    return result;
+  }
+
   async getCuttingById(id: number): Promise<DictionaryDto> {
     const record = await this.prisma.cuttings.findUnique({ where: { id } });
     if (!record) {

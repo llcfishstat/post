@@ -1,11 +1,16 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 
 export const TransformMessagePayload = createParamDecorator(
-  (_data: unknown, ctx: ExecutionContext) => {
-    const message = ctx.switchToRpc().getData();
+  (data: unknown, ctx: ExecutionContext) => {
+    const rawMessage = ctx.switchToRpc().getData();
+
+    if (typeof rawMessage === 'object') {
+      return rawMessage;
+    }
+
     try {
-      return JSON.parse(message);
-    } catch (error) {
+      return JSON.parse(rawMessage);
+    } catch {
       throw new Error('Invalid JSON payload');
     }
   },
