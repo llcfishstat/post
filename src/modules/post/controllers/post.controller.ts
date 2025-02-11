@@ -1,9 +1,9 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { MessagePattern, Payload } from '@nestjs/microservices';
 
 import { PostService } from '../services/post.service';
 import { TransformMessagePayload } from 'src/common/decorators/payload.decorator';
+import { MessagePattern } from '@nestjs/microservices';
 
 @ApiTags('post')
 @Controller({
@@ -28,26 +28,6 @@ export class PostController {
   ) {
     console.log('Received getAllByIds =>', data);
     return this.postService.getAllByIds(data);
-  }
-
-  @MessagePattern('getCuttingById')
-  async getCuttingById(@Payload() data: { id: number }) {
-    return this.postService.getCuttingById(data.id);
-  }
-
-  @MessagePattern('getSortById')
-  async getSortById(@Payload() data: { id: number }) {
-    return this.postService.getSortById(data.id);
-  }
-
-  @MessagePattern('getCatchAreaById')
-  async getCatchAreaById(@Payload() data: { id: number }) {
-    return this.postService.getCatchAreaById(data.id);
-  }
-
-  @MessagePattern('getTypeOfProcessingById')
-  async getTypeOfProcessingById(@Payload() data: { id: number }) {
-    return this.postService.getTypeOfProcessingById(data.id);
   }
 
   @Get('cutting-type')

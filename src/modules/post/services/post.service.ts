@@ -43,17 +43,14 @@ export class PostService {
     if (data.catchAreaId) {
       result.catchArea = await this.getCatchAreaById(data.catchAreaId);
     }
-
     if (data.processingTypeId) {
       result.processingType = await this.getTypeOfProcessingById(
         data.processingTypeId,
       );
     }
-
     if (data.sizeId) {
       result.size = await this.getSizeById(data.sizeId);
     }
-
     if (data.productId) {
       result.product = await this.getProductById(data.productId);
     }

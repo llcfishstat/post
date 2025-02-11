@@ -9,5 +9,6 @@ import { PrismaService } from '../../common/services/prisma.service';
   imports: [ConfigModule],
   controllers: [PostController],
   providers: [PrismaService, PostService],
+  exports: [PostService],
 })
 export class PostModule {}
