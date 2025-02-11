@@ -7,6 +7,66 @@ import { DictionaryDto } from '../interfaces/posts.interface';
 export class PostService {
   constructor(private readonly prisma: PrismaService) {}
 
+  async getAllByIds(data: {
+    cuttingTypeId?: number;
+    sortId?: number;
+    catchAreaId?: number;
+    processingTypeId?: number;
+    sizeId?: number;
+    productId?: number;
+    additionalServices?: number[];
+  }): Promise<{
+    cutting?: DictionaryDto;
+    sort?: DictionaryDto;
+    catchArea?: DictionaryDto;
+    processingType?: DictionaryDto;
+    size?: DictionaryDto;
+    product?: DictionaryDto;
+    additionalServices?: DictionaryDto[];
+  }> {
+    const result: {
+      cutting?: DictionaryDto;
+      sort?: DictionaryDto;
+      catchArea?: DictionaryDto;
+      processingType?: DictionaryDto;
+      size?: DictionaryDto;
+      product?: DictionaryDto;
+      additionalServices?: DictionaryDto[];
+    } = {};
+
+    if (data.cuttingTypeId) {
+      result.cutting = await this.getCuttingById(data.cuttingTypeId);
+    }
+    if (data.sortId) {
+      result.sort = await this.getSortById(data.sortId);
+    }
+    if (data.catchAreaId) {
+      result.catchArea = await this.getCatchAreaById(data.catchAreaId);
+    }
+
+    if (data.processingTypeId) {
+      result.processingType = await this.getTypeOfProcessingById(
+        data.processingTypeId,
+      );
+    }
+
+    if (data.sizeId) {
+      result.size = await this.getSizeById(data.sizeId);
+    }
+
+    if (data.productId) {
+      result.product = await this.getProductById(data.productId);
+    }
+
+    if (data.additionalServices) {
+      result.additionalServices = await this.getAdditionalServicesByIds(
+        data.additionalServices,
+      );
+    }
+
+    return result;
+  }
+
   async getCuttingById(id: number): Promise<DictionaryDto> {
     const record = await this.prisma.cuttings.findUnique({ where: { id } });
     if (!record) {
@@ -29,6 +89,18 @@ export class PostService {
       throw new NotFoundException(`Product with ID=${id} not found`);
     }
     return { id: record.id, name: record.title };
+  }
+
+  async getAdditionalServicesByIds(ids: number[]): Promise<DictionaryDto[]> {
+    const record = await this.prisma.additionalServices.findMany({
+      where: {
+        id: {
+          in: ids,
+        },
+      },
+    });
+
+    return record.map((item) => ({ id: item.id, name: item.title }));
   }
 
   async getSizeById(id: number): Promise<DictionaryDto> {
